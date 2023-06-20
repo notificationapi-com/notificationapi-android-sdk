@@ -6,6 +6,8 @@ import com.notificationapi.notificationapi_android_sdk.NotificationApi
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiDeviceInfo
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiTokenType
 import com.notificationapi.notificationapi_android_sdk.toBase64
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -31,30 +33,32 @@ class TokenRepository {
             return "${credentials.clientId}:${credentials.userId}:${credentials.hashedUserId ?: "undefined"}".toBase64()
         }
 
-    fun syncToken(token: String) {
-        val credentials = NotificationApi.shared.getCredentials()
+    suspend fun syncToken(token: String) {
+        return withContext(Dispatchers.IO) {
+            val credentials = NotificationApi.shared.getCredentials()
 
-        var url = "$BASE_URL/${credentials.clientId}/users/${credentials.userId}"
+            var url = "$BASE_URL/${credentials.clientId}/users/${credentials.userId}"
 
-        credentials.hashedUserId?.let {
-            url += "?hashedUserId=${it}"
-        }
-
-        val body = SyncApnTokenRequestBody(pushTokens = listOf(PushToken(type = NotificationApiTokenType.FCM, token = token, device = NotificationApi.shared.DEVICE_INFO)))
-        val jsonBody = Gson().toJson(body)
-
-        val request = Request.Builder()
-            .url(url)
-            .addHeader("Authorization", "BASIC $authToken")
-            .post(jsonBody.toRequestBody())
-            .build()
-
-        http.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) {
-                Log.d(NotificationApi.TAG, "$response")
+            credentials.hashedUserId?.let {
+                url += "?hashedUserId=${it}"
             }
 
-            Log.d(NotificationApi.TAG, response.body!!.string())
+            val body = SyncApnTokenRequestBody(pushTokens = listOf(PushToken(type = NotificationApiTokenType.FCM, token = token, device = NotificationApi.shared.DEVICE_INFO)))
+            val jsonBody = Gson().toJson(body)
+
+            val request = Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "BASIC $authToken")
+                .post(jsonBody.toRequestBody())
+                .build()
+
+            http.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) {
+                    Log.d(NotificationApi.TAG, "$response")
+                }
+
+                Log.d(NotificationApi.TAG, response.body!!.string())
+            }
         }
     }
 }

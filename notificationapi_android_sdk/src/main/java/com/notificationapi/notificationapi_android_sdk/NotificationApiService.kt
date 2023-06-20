@@ -4,6 +4,9 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.notificationapi.notificationapi_android_sdk.repositories.TokenRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 open class NotificationApiService: FirebaseMessagingService() {
 
@@ -17,7 +20,9 @@ open class NotificationApiService: FirebaseMessagingService() {
 
         Log.d(NotificationApi.TAG, "FCM Token: $token")
 
-        TokenRepository().syncToken(token)
+        CoroutineScope(Dispatchers.IO).launch {
+            TokenRepository().syncToken(token)
+        }
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
