@@ -1,16 +1,14 @@
 package com.notificationapi.example
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.notificationapi.notificationapi_android_sdk.NotificationApi
+import com.notificationapi.notificationapi_android_sdk.activity.NotificationApiActivity
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiCredentials
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : NotificationApiActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        NotificationApi.initialize(context = this)
 
         NotificationApi.shared.configure(
             NotificationApiCredentials(
