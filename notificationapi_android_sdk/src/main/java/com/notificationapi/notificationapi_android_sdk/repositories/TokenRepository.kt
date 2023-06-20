@@ -15,6 +15,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 class TokenRepository {
     companion object {
         const val BASE_URL = "https://api.notificationapi.com"
+
+        private const val AGENT = "NotificationApi_Android_SDK"
+        private const val VERSION = "1.0.0"
     }
 
     val http = OkHttpClient.Builder().addNetworkInterceptor { chain ->
@@ -22,6 +25,7 @@ class TokenRepository {
             chain.request()
                 .newBuilder()
                 .addHeader("Content-Type", "application/json")
+                .addHeader("User-Agent", "$AGENT/$VERSION")
                 .build()
         )
     }.build()
