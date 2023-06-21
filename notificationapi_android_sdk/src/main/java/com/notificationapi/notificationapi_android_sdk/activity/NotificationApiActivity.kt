@@ -19,7 +19,7 @@ open class NotificationApiActivity: AppCompatActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == 0) {
+        if (requestCode == NotificationApi.NOTIFICATION_PERMISSION_REQUEST) {
             val isGranted = grantResults[0] == PackageManager.PERMISSION_GRANTED
             onNotificationRequestPermissionResult(isGranted)
         }

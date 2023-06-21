@@ -6,7 +6,7 @@ import com.notificationapi.notificationapi_android_sdk.NotificationApi
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiDeviceInfo
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiError
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiTokenType
-import com.notificationapi.notificationapi_android_sdk.toBase64
+import com.notificationapi.notificationapi_android_sdk.utils.toBase64
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient

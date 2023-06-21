@@ -27,6 +27,8 @@ class NotificationApi private constructor(private val context: Context) {
     companion object {
         internal const val TAG = "NotificationAPI"
 
+        internal const val NOTIFICATION_PERMISSION_REQUEST = 0
+
         private const val CLIENT_ID = "notificationapi_client_id"
         private const val USER_ID = "notificationapi_user_id"
         private const val HASHED_ID = "notificationapi_hashed_user_id"
@@ -36,7 +38,7 @@ class NotificationApi private constructor(private val context: Context) {
         val shared: NotificationApi
             get() {
                 mShared?.let { return it }
-                throw NotificationApiError.unintialized
+                throw NotificationApiError.uninitialized
             }
 
         fun initialize(context: Context) {
@@ -72,7 +74,7 @@ class NotificationApi private constructor(private val context: Context) {
             hashedUserId = hashedUserId
         )
     }
-    fun askNotificationPermissions(requestCode: Int = 0) {
+    fun askNotificationPermissions(requestCode: Int = NOTIFICATION_PERMISSION_REQUEST) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
                 if (context is Activity) {

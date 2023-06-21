@@ -1,4 +1,4 @@
-package com.notificationapi.notificationapi_android_sdk
+package com.notificationapi.notificationapi_android_sdk.utils
 
 import android.util.Base64
 
