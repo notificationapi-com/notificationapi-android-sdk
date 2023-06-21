@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.notificationapi.notificationapi_android_sdk.NotificationApi
+import com.notificationapi.notificationapi_android_sdk.models.NotificationApiError
 import com.notificationapi.notificationapi_android_sdk.repositories.TokenRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +23,11 @@ open class NotificationApiService: FirebaseMessagingService() {
         Log.d(NotificationApi.TAG, "FCM Token: $token")
 
         CoroutineScope(Dispatchers.IO).launch {
-            TokenRepository().syncToken(token)
+            try {
+                TokenRepository().syncToken(token)
+            } catch (e: NotificationApiError) {
+                Log.w(NotificationApi.TAG, e.message!!)
+            }
         }
     }
 

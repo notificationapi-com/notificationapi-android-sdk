@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.gson.Gson
 import com.notificationapi.notificationapi_android_sdk.NotificationApi
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiDeviceInfo
+import com.notificationapi.notificationapi_android_sdk.models.NotificationApiError
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiTokenType
 import com.notificationapi.notificationapi_android_sdk.toBase64
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,12 @@ class TokenRepository {
     suspend fun syncToken(token: String) {
         return withContext(Dispatchers.IO) {
             val credentials = NotificationApi.shared.getCredentials()
-            val baseUrl = NotificationApi.shared.config.baseUrl
+            val baseUrl = try {
+                NotificationApi.shared.config.baseUrl
+            } catch (e: NotificationApiError) {
+                Log.w(NotificationApi.TAG, e.message!!)
+                return@withContext
+            }
 
             var url = "$baseUrl/${credentials.clientId}/users/${credentials.userId}"
 
@@ -57,10 +63,8 @@ class TokenRepository {
 
             http.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) {
-                    Log.d(NotificationApi.TAG, "$response")
+                    throw NotificationApiError.failedToSyncToken
                 }
-
-                Log.d(NotificationApi.TAG, response.body!!.string())
             }
         }
     }

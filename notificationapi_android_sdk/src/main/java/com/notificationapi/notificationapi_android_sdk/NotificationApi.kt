@@ -10,7 +10,7 @@ import androidx.core.content.ContextCompat
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiConfig
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiCredentials
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiDeviceInfo
-import java.lang.Error
+import com.notificationapi.notificationapi_android_sdk.models.NotificationApiError
 
 class NotificationApi private constructor(private val context: Context) {
     internal lateinit var deviceInfo: NotificationApiDeviceInfo
@@ -21,7 +21,7 @@ class NotificationApi private constructor(private val context: Context) {
             if (this::mConfig.isInitialized) {
                 return mConfig
             }
-            throw Error("")
+            throw NotificationApiError.missingCredentials
         }
 
     companion object {
@@ -36,7 +36,7 @@ class NotificationApi private constructor(private val context: Context) {
         val shared: NotificationApi
             get() {
                 mShared?.let { return it }
-                throw Error("")
+                throw NotificationApiError.unintialized
             }
 
         fun initialize(context: Context) {
