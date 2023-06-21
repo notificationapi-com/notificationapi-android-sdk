@@ -61,7 +61,17 @@ class NotificationApi private constructor(private val context: Context) {
         preferences.apply()
     }
 
-    fun getCredentials(): NotificationApiCredentials {
+    fun askNotificationPermissions(requestCode: Int = NOTIFICATION_PERMISSION_REQUEST) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+                if (context is Activity) {
+                    context.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), requestCode)
+                }
+            }
+        }
+    }
+
+    internal fun getCredentials(): NotificationApiCredentials {
         val preferences = context.getSharedPreferences(TAG, Context.MODE_PRIVATE)
 
         val clientId = preferences.getString(CLIENT_ID, "") as String
@@ -73,14 +83,5 @@ class NotificationApi private constructor(private val context: Context) {
             userId = userId,
             hashedUserId = hashedUserId
         )
-    }
-    fun askNotificationPermissions(requestCode: Int = NOTIFICATION_PERMISSION_REQUEST) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
-                if (context is Activity) {
-                    context.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), requestCode)
-                }
-            }
-        }
     }
 }
