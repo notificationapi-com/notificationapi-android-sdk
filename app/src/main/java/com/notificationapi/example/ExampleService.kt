@@ -7,6 +7,6 @@ class ExampleService: NotificationApiService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
 
-        Log.d("Example App", "New Token: $token")
+        Log.d(MainActivity.TAG, "New Token: $token")
     }
 }

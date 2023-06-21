@@ -7,22 +7,27 @@ import com.notificationapi.notificationapi_android_sdk.activity.NotificationApiA
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiCredentials
 
 class MainActivity : NotificationApiActivity() {
+    companion object {
+        const val TAG = "Example App"
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Configure NotificationAPI with credentials
         NotificationApi.shared.configure(
             NotificationApiCredentials(
-            clientId = "",
-            userId = ""
+            clientId = "CLIENT_ID",
+            userId = "USER_ID"
             )
         )
 
+        // Request the user's permission to use notifications
         NotificationApi.shared.askNotificationPermissions()
     }
 
     override fun onNotificationRequestPermissionResult(isGranted: Boolean) {
         super.onNotificationRequestPermissionResult(isGranted)
-        Log.d("Example App", "Notifications are authorized?: $isGranted")
+        Log.d(TAG, "Notifications are authorized?: $isGranted")
     }
 }
