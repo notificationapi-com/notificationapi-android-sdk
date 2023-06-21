@@ -70,6 +70,6 @@ class TokenRepository {
     }
 }
 
-data class SyncApnTokenRequestBody(val pushTokens: List<PushToken>)
+private data class SyncApnTokenRequestBody(val pushTokens: List<PushToken>)
 
-data class PushToken(val type: NotificationApiTokenType, val token: String, val device: NotificationApiDeviceInfo)
+private data class PushToken(val type: NotificationApiTokenType, val token: String, val device: NotificationApiDeviceInfo)
