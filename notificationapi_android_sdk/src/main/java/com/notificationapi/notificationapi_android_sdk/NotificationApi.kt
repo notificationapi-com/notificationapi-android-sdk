@@ -1,12 +1,17 @@
 package com.notificationapi.notificationapi_android_sdk
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.content.ContextCompat
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiCredentials
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiDeviceInfo
 import java.lang.Error
 
-class NotificationApi private constructor(internal val context: Context) {
+class NotificationApi private constructor(private val context: Context) {
     internal lateinit var DEVICE_INFO: NotificationApiDeviceInfo
 
     companion object {
@@ -55,5 +60,14 @@ class NotificationApi private constructor(internal val context: Context) {
             userId = userId,
             hashedUserId = hashedUserId
         )
+    }
+    fun askNotificationPermissions(requestCode: Int = 0) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+                if (context is Activity) {
+                    context.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), requestCode)
+                }
+            }
+        }
     }
 }
