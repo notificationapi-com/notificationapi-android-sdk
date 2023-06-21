@@ -7,12 +7,22 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
+import com.notificationapi.notificationapi_android_sdk.models.NotificationApiConfig
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiCredentials
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiDeviceInfo
 import java.lang.Error
 
 class NotificationApi private constructor(private val context: Context) {
-    internal lateinit var DEVICE_INFO: NotificationApiDeviceInfo
+    internal lateinit var deviceInfo: NotificationApiDeviceInfo
+
+    private lateinit var mConfig: NotificationApiConfig
+    internal val config: NotificationApiConfig
+        get() {
+            if (this::mConfig.isInitialized) {
+                return mConfig
+            }
+            throw Error("")
+        }
 
     companion object {
         internal const val TAG = "NotificationAPI"
@@ -22,23 +32,24 @@ class NotificationApi private constructor(private val context: Context) {
         private const val HASHED_ID = "notificationapi_hashed_user_id"
 
         @SuppressLint("StaticFieldLeak")
-        private var _shared: NotificationApi? = null
+        private var mShared: NotificationApi? = null
         val shared: NotificationApi
             get() {
-                _shared?.let { return it }
+                mShared?.let { return it }
                 throw Error("")
             }
 
         fun initialize(context: Context) {
-            if (_shared == null) {
-                _shared = NotificationApi(context)
+            if (mShared == null) {
+                mShared = NotificationApi(context)
 
-                shared.DEVICE_INFO = NotificationApiDeviceInfo(context)
+                shared.deviceInfo = NotificationApiDeviceInfo(context)
             }
         }
     }
 
-    fun configure(credentials: NotificationApiCredentials) {
+    fun configure(credentials: NotificationApiCredentials, config: NotificationApiConfig = NotificationApiConfig("https://api.notificationapi.com")) {
+        this.mConfig = config
         val preferences = context.getSharedPreferences(TAG, Context.MODE_PRIVATE).edit()
 
         preferences.putString(CLIENT_ID, credentials.clientId)

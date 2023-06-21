@@ -14,8 +14,6 @@ import okhttp3.RequestBody.Companion.toRequestBody
 
 class TokenRepository {
     companion object {
-        const val BASE_URL = "https://api.notificationapi.com"
-
         private const val AGENT = "NotificationApi_Android_SDK"
         private const val VERSION = "1.0.0"
     }
@@ -40,14 +38,15 @@ class TokenRepository {
     suspend fun syncToken(token: String) {
         return withContext(Dispatchers.IO) {
             val credentials = NotificationApi.shared.getCredentials()
+            val baseUrl = NotificationApi.shared.config.baseUrl
 
-            var url = "$BASE_URL/${credentials.clientId}/users/${credentials.userId}"
+            var url = "$baseUrl/${credentials.clientId}/users/${credentials.userId}"
 
             credentials.hashedUserId?.let {
                 url += "?hashedUserId=${it}"
             }
 
-            val body = SyncApnTokenRequestBody(pushTokens = listOf(PushToken(type = NotificationApiTokenType.FCM, token = token, device = NotificationApi.shared.DEVICE_INFO)))
+            val body = SyncApnTokenRequestBody(pushTokens = listOf(PushToken(type = NotificationApiTokenType.FCM, token = token, device = NotificationApi.shared.deviceInfo)))
             val jsonBody = Gson().toJson(body)
 
             val request = Request.Builder()
