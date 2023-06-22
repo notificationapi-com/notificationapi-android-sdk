@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.messaging.RemoteMessage
 import com.notificationapi.notificationapi_android_sdk.NotificationApi
+import com.notificationapi.notificationapi_android_sdk.utils.getRemoteMessage
 
 open class NotificationApiActivity: AppCompatActivity() {
 
@@ -30,9 +31,9 @@ open class NotificationApiActivity: AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        (intent?.extras?.get(NotificationApi.NOTIFICATION_INTENT_KEY) as? RemoteMessage)?.let { message ->
+        intent?.getRemoteMessage()?.let {
             intent.extras?.remove(NotificationApi.NOTIFICATION_INTENT_KEY)
-            onNotificationClicked(message)
+            onNotificationClicked(it)
         }
     }
 
