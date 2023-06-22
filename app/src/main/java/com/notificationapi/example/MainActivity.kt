@@ -2,6 +2,7 @@ package com.notificationapi.example
 
 import android.os.Bundle
 import android.util.Log
+import com.google.firebase.messaging.RemoteMessage
 import com.notificationapi.notificationapi_android_sdk.NotificationApi
 import com.notificationapi.notificationapi_android_sdk.activity.NotificationApiActivity
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiCredentials
@@ -26,6 +27,14 @@ class MainActivity : NotificationApiActivity() {
         NotificationApi.shared.askNotificationPermissions()
     }
 
+    // Handle clicked notifications
+    override fun onNotificationClicked(message: RemoteMessage) {
+        super.onNotificationClicked(message)
+
+        Log.d(TAG, "Notification was clicked on")
+    }
+
+    // Handle notification permission request results
     override fun onNotificationRequestPermissionResult(isGranted: Boolean) {
         super.onNotificationRequestPermissionResult(isGranted)
         Log.d(TAG, "Notifications are authorized?: $isGranted")
