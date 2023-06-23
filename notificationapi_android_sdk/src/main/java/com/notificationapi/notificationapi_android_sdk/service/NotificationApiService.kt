@@ -4,7 +4,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -12,6 +11,7 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.notificationapi.notificationapi_android_sdk.NotificationApi
 import com.notificationapi.notificationapi_android_sdk.models.NotificationApiError
+import com.notificationapi.notificationapi_android_sdk.models.NotificationApiIntent
 import com.notificationapi.notificationapi_android_sdk.repositories.TokenRepository
 import com.notificationapi.notificationapi_android_sdk.utils.getRemoteMessage
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +43,7 @@ open class NotificationApiService: FirebaseMessagingService() {
         onPreDisplayNotification(message)
     }
 
-    fun displayNotification(intent: Intent, icon: Int, channelId: String = "default", channelName: String = "Notifications"): Int {
+    fun displayNotification(intent: NotificationApiIntent, icon: Int, channelId: String = "default", channelName: String = "Notifications"): Int {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_MUTABLE)
 
         val message = intent.getRemoteMessage()
