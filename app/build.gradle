@@ -34,7 +34,7 @@ android {
 }
 
 android.applicationVariants.all { variant ->
-    if (variant.name == 'release') {
+    if (variant.name == 'release' || variant.name == 'debug') {
         project.tasks.getByName('process' + variant.name.capitalize() + 'GoogleServices').enabled = false
     }
 }
