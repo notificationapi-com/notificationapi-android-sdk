@@ -40,10 +40,6 @@ android {
 publishing {
     publications {
         release(MavenPublication) {
-            groupId = 'com.github.notificationapi-com'
-            artifactId = 'notificationapi-android-sdk'
-            version = '1.0'
-
             afterEvaluate {
                 from components.release
             }
