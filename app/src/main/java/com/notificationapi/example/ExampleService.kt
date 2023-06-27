@@ -16,8 +16,7 @@ class ExampleService: NotificationApiService() {
         val onClickIntent = NotificationApiIntent(this, MainActivity::class.java, message)
 
         displayNotification(
-            intent = onClickIntent,
-            icon = android.R.drawable.ic_dialog_info
+            intent = onClickIntent
         )
     }
 }
