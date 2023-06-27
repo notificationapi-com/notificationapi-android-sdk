@@ -33,6 +33,13 @@ android {
     }
 }
 
+// Disable the google services plugin check when building a release
+android.applicationVariants.all { variant ->
+    if (variant.name == 'release' || variant.name == 'debug') {
+        project.tasks.getByName('process' + variant.name.capitalize() + 'GoogleServices').enabled = false
+    }
+}
+
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.8.0'
