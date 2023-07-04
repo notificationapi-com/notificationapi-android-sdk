@@ -27,7 +27,7 @@ class NotificationApi private constructor(private val context: Context) {
     companion object {
         internal const val TAG = "NotificationAPI"
 
-        internal const val NOTIFICATION_PERMISSION_REQUEST = 0
+        const val NOTIFICATION_PERMISSION_REQUEST = 0
         const val NOTIFICATION_INTENT_KEY = "notificationapi_notification_intent_key"
 
         private const val CLIENT_ID = "notificationapi_client_id"
